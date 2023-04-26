@@ -76,7 +76,7 @@ createServer({
     });
 
     this.get("/vans/:id", (schema, request) => {
-      // console.log(schema, request);
+      // console.log('request', request);
       const id = request.params.id;
       return schema.vans.find(id);
     });
