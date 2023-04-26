@@ -7,6 +7,7 @@ export default function Header() {
         #VanLife
       </Link>
       <nav>
+        <Link to="/host">Hosts</Link>
         <Link to="/about">About</Link>
         <Link to="/vans">Vans</Link>
       </nav>
