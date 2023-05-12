@@ -1,34 +1,41 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import HostVanDetailLayout from "../../components/HostVanDetailLayout";
 
-const HostVanDetail = () => {
+export default function HostVanDetail() {
   const { id } = useParams();
-  const [van, setVan] = useState("");
+  const [currentVan, setCurrentVan] = React.useState(null);
+  
 
-  useEffect(() => {
+  React.useEffect(() => {
     fetch(`/api/host/vans/${id}`)
-      .then((response) => response.json())
-      .then(({ vans }) => {
-        console.log(vans);
-        setVan(vans);
-      });
-  }, [id]);
+      .then((res) => res.json())
+      .then((data) => setCurrentVan(data.vans));
+  }, []);
 
+  if (!currentVan) {
+    return <h1>Loading...</h1>;
+  }
   return (
-    <div>
-      <Link to="/host/vans"> {`<--`} Back to all vans</Link>
-      {van ? (
-        <div to={van.id}>
-          <h1>{van.name}</h1>
-          <img src={van.imgUrl} alt="" />
-          <h2>{van.type}</h2>
-          <p>{van.price}$</p>
-        </div>
-      ) : (
-        <div>loading</div>
-      )}
-    </div>
-  );
-};
+    <section>
+      <Link to=".." relative="path" className="back-button">
+        &larr; <span>Back to all vans</span>
+      </Link>
 
-export default HostVanDetail;
+      <div className="host-van-detail-layout-container">
+        <div className="host-van-detail">
+          <img src={currentVan.imageUrl} />
+          <div className="host-van-detail-info-text">
+            <i className={`van-type van-type-${currentVan.type}`}>
+              {currentVan.type}
+            </i>
+            <h3>{currentVan.name}</h3>
+            <h4>${currentVan.price}/day</h4>
+          </div>
+        </div>
+        {/*Your changes will go here*/}
+       <HostVanDetailLayout/>
+      </div>
+    </section>
+  );
+}
