@@ -1,6 +1,9 @@
+import { useOutletContext } from "react-router-dom" //передача данных от родителя детям через outlet
+
 const HostVanPricing = () => {
+  console.log(useOutletContext());
   return (
-    <div>HostVanPricing</div>
+    <div>Price: { useOutletContext().price }$</div>
   )
 }
 

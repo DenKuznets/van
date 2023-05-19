@@ -1,18 +1,22 @@
 import React from "react";
-import { useParams, Link } from "react-router-dom";
-import HostVanDetailLayout from "../../components/HostVanDetailLayout";
+import { useParams, Link, NavLink, Outlet } from "react-router-dom";
+// import HostVanDetailLayout from "../../components/HostVanDetailLayout";
 
 export default function HostVanDetail() {
   const { id } = useParams();
   const [currentVan, setCurrentVan] = React.useState(null);
-  
+  const activeLink = {
+    fontWeight: "bold",
+    textDecoration: "underline",
+    color: "#161616",
+  };
 
   React.useEffect(() => {
     fetch(`/api/host/vans/${id}`)
       .then((res) => res.json())
       .then((data) => setCurrentVan(data.vans));
-  }, []);
-
+  }, [id]);
+  // console.log(currentVan);
   if (!currentVan) {
     return <h1>Loading...</h1>;
   }
@@ -34,7 +38,29 @@ export default function HostVanDetail() {
           </div>
         </div>
         {/*Your changes will go here*/}
-       <HostVanDetailLayout/>
+        {/* <HostVanDetailLayout/> */}
+        <nav className="host-nav">
+          <NavLink
+            end
+            style={({ isActive }) => (isActive ? activeLink : null)}
+            to="."
+          >
+            Details
+          </NavLink>
+          <NavLink
+            style={({ isActive }) => (isActive ? activeLink : null)}
+            to="pricing"
+          >
+            Pricing
+          </NavLink>
+          <NavLink
+            style={({ isActive }) => (isActive ? activeLink : null)}
+            to="photos"
+          >
+            Photos
+          </NavLink>
+        </nav>
+        <Outlet context={currentVan} />
       </div>
     </section>
   );
