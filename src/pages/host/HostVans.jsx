@@ -1,36 +1,39 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link, useLoaderData } from "react-router-dom";
+import { getHostVans } from "../../api";
 
-const HostVans = () => {
-  const [vans, setVans] = useState("");
-  useEffect(() => {
-    fetch("/api/host/vans")
-      .then((response) => {
-        return response.json();
-      })
-      .then(({ vans }) => {
-        setVans(vans);
-      });
-  }, []);
+/**
+ * Challenge: move the data fetching from the useEffect
+ * into a loader function instead. ALSO, do the same for
+ * the VanDetail.jsx file as well, since that is also
+ * fetching data in a useEffect 😬
+ */
 
-  const vansList = vans ? (
-    vans.map((van, index) => {
-      return (
-        <li key={index}>
-          <Link to={van.id}>{van.name}</Link>
-        </li>
-      );
-    })
-  ) : (
-    <div>loading</div>
-  );
+export function loader() {
+    return getHostVans();
+}
 
-  return (
-    <div>
-      <h2>Your listed vans</h2>
-      <ul>{vansList}</ul>
-    </div>
-  );
-};
+export default function HostVans() {
+    const vans = useLoaderData();
 
-export default HostVans;
+    const hostVansEls = vans.map((van) => (
+        <Link to={van.id} key={van.id} className="host-van-link-wrapper">
+            <div className="host-van-single" key={van.id}>
+                <img src={van.imageUrl} alt={`Photo of ${van.name}`} />
+                <div className="host-van-info">
+                    <h3>{van.name}</h3>
+                    <p>${van.price}/day</p>
+                </div>
+            </div>
+        </Link>
+    ));
+
+    return (
+        <section>
+            <h1 className="host-vans-title">Your listed vans</h1>
+            <div className="host-vans-list">
+                <section>{hostVansEls}</section>
+            </div>
+        </section>
+    );
+}

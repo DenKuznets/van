@@ -1,6 +1,13 @@
 import { Link, NavLink } from "react-router-dom";
+import avatarIcon from '../assets/images/avatar-icon.png'
 
 export default function Header() {
+  const activeStyles = {
+    fontWeight: "bold",
+    textDecoration: "underline",
+    color: "#161616",
+  };
+
   return (
     <header>
       <Link className="site-logo" to="/">
@@ -8,23 +15,26 @@ export default function Header() {
       </Link>
       <nav>
         <NavLink
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-          to="/host"
+          to="host"
+          style={({ isActive }) => (isActive ? activeStyles : null)}
         >
-          Hosts
+          Host
         </NavLink>
         <NavLink
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-          to="/about"
+          to="about"
+          style={({ isActive }) => (isActive ? activeStyles : null)}
         >
           About
         </NavLink>
         <NavLink
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-          to="/vans"
+          to="vans"
+          style={({ isActive }) => (isActive ? activeStyles : null)}
         >
           Vans
         </NavLink>
+        <Link to="login" className="login-link">
+          <img src={avatarIcon} className="login-icon" />
+        </Link>
       </nav>
     </header>
   );
